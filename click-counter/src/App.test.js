@@ -31,8 +31,14 @@ const setup = (props={}, state=null) => {
 */
 const findByTestAttr = (wrapper, val) => wrapper.find(`[data-test="${val}"]`);
 
-const clickToButton = (wrapper) => {
-	const buttonComponent = findByTestAttr(wrapper, "component-button");
+const clickToIncrementButton = (wrapper) => {
+	const buttonComponent = findByTestAttr(wrapper, "component-increment-button");
+	buttonComponent.simulate('click');
+	wrapper.update();
+};
+
+const clickToDecrementButton = (wrapper) => {
+	const buttonComponent = findByTestAttr(wrapper, "component-decrement-button");
 	buttonComponent.simulate('click');
 	wrapper.update();
 };
@@ -43,7 +49,12 @@ test('renders without errors', () => {
 	expect(appComponent.length).toBe(1);
 });
 test('renders increment button', () => {
-	const buttonComponent = findByTestAttr(setup(), "component-button");
+	const buttonComponent = findByTestAttr(setup(), "component-increment-button");
+
+	expect(buttonComponent.length).toBe(1);
+});
+test('renders decrement button', () => {
+	const buttonComponent = findByTestAttr(setup(), "component-decrement-button");
 
 	expect(buttonComponent.length).toBe(1);
 });
@@ -58,12 +69,40 @@ test('counters starts at 0', () => {
 
 	expect(initialCounterState).toBe(0);
 });
+
+test('clicking button decrement counter display', () => {
+	const wrapper = setup();
+	const initialCounterState = wrapper.state('counter');
+
+	expect(initialCounterState).toBe(0);
+});
+
 test('clicking button increments counter display', () => {
 	const counter = 7;
 	const wrapper = setup(null, { counter });
 	
-	clickToButton(wrapper);
-	
+	clickToIncrementButton(wrapper);
+
 	const counterComponent = findByTestAttr(wrapper, "component-counter");
 	expect(counterComponent.text()).toContain(counter + 1);
+});
+
+test('clicking button decrement counter display', () => {
+	const counter = 7;
+	const wrapper = setup(null, { counter });
+	
+	clickToDecrementButton(wrapper);
+
+	const counterComponent = findByTestAttr(wrapper, "component-counter");
+	expect(counterComponent.text()).toContain(counter - 1);
+});
+
+test('clicking button decrement can`t be less than 0', () => {
+	const counter = 0;
+	const wrapper = setup(null, { counter });
+	
+	clickToDecrementButton(wrapper);
+
+	const counterComponent = findByTestAttr(wrapper, "component-counter");
+	expect(counterComponent.text()).toContain(0);
 });
