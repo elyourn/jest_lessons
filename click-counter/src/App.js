@@ -2,16 +2,14 @@ import React, { Component } from 'react';
 import './App.css';
 
 const checkValueLimit = (val) => {
-	const newVal =  val - 1;
-	
-	if (newVal < 0) {
-		return val;
+	if (val < 0) {
+		return 0;
 	}
 
-	return newVal;
+	return val;
 }
 
-const toggleNotification = (val) => val > 0 ? true : false;
+const toggleNotification = (val) => val >= 0 ? false : true;
 
 class App extends Component {
 	state = {
@@ -20,23 +18,23 @@ class App extends Component {
 	};
 	incrementHandler = () => {
 		this.setState((state) => {
-			state.counter += 1;
+			const newState = state.counter + 1;
+			state.counter = newState;
+			state.notification = toggleNotification(newState);
+
 			return state;
 		});
 	}
 	decrementHandler = () => {
 		this.setState((state) => {
-			state.counter = checkValueLimit(state.counter);
+			const newState =  state.counter - 1;
+			state.counter = checkValueLimit(newState);
+			state.notification = toggleNotification(newState);
+
 			return state;
 		});
 	}
-
-	static getDerivedStateFromProps (nextProps, prevState) {
-		return {
-			notification: toggleNotification(prevState) 
-		}
-	}
-
+	
 	render() {
 		return (
 			<div data-test="component-app">
@@ -53,7 +51,7 @@ class App extends Component {
 					data-test="component-decrement-button"
 					onClick={this.decrementHandler}
 				>
-					increment
+					decrement
 				</button>
 				<button
 					type="button" 
