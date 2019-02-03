@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 const Congrat = ({ success }) => {
    if (success === true) {
@@ -19,4 +20,5 @@ Congrat.propTypes = {
     success: PropTypes.bool.isRequired
 }
 
-export default Congrat;
+const mapStateToProps = ({ success }) => ({success});
+export default connect(mapStateToProps)(Congrat);

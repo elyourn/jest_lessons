@@ -1,9 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import { shallow } from 'enzyme';
+import { storeFactory } from '../test/testUtils';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+import ConnectedApp, { App } from './App';
+
+test('`getSecretWord runs on App mount`', () => {
+    const getSecretWordMock = jest.fn();
+
+    const wrapper = shallow(<App getSecretWord={getSecretWordMock} />);
+    wrapper.instance().componentDidMount();
+    const getSecretWordCallsCount = getSecretWordMock.mock.calls.length;
+    expect(getSecretWordCallsCount).toBe(1);
 });

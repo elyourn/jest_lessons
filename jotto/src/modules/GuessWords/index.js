@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
 import Instructions from './components/Instructions';
 import Table from './components/Table';
+
 
 const isInstructionShow = (arr) => arr.length === 0 ? true : false;
 const isResultsTableShow = (arr) => arr.length === 0 ? false : true;
@@ -28,4 +31,6 @@ GuessWords.propTypes = {
     )
 }
 
-export default GuessWords;
+const mapStateToProps = ({ guessedWords }) => ({guessedWords});
+
+export default connect(mapStateToProps)(GuessWords);

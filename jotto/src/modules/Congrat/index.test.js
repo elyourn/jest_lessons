@@ -1,20 +1,21 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import { findByTestAttr, checkProps } from '../../../test/testUtils';
+import { findByTestAttr, checkProps, storeFactory } from '../../../test/testUtils';
 import Congrat from './index';
 import { defaultProps } from './constants';
 
 /**
  * Factory function to create to create ShallowWrapper for the App component
  * @function setup
- * @param {object} props - Component props specific to this setup
+ * @param {object} initialStore - Component props specific to this setup
  * @returns {ShallowWrapper}
 */
-const setup = (props={}) => {
-    const componentProps = { ...defaultProps, ...props };
-    
-    return shallow(<Congrat {...componentProps} />);
+const setup = (initialStore={}) => {
+    const store = storeFactory(initialStore);
+    const wrapper = shallow(<Congrat store ={store} />).dive();
+
+    return wrapper;
 }
 
 test('renders without errors', () => {

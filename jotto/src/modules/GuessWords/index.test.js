@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import { findByTestAttr, checkProps } from '../../../test/testUtils';
+import { findByTestAttr, checkProps, storeFactory } from '../../../test/testUtils';
 import GuessWords from './index';
 import { defaultProps } from './constants';
 
@@ -11,10 +11,18 @@ import { defaultProps } from './constants';
  * @param {object} props - Component props specific to this setup
  * @returns {MountWrapper}
 */
-const setup = (props={}) => {
-    const componentProps = { ...defaultProps, ...props };
-    
-    return mount(<GuessWords {...componentProps} />);
+/**
+ * TODO: Есть баг с redux 6 and enzyme, проверить после - 
+ * https://www.udemy.com/react-testing-with-jest-and-enzyme/learn/v4/questions/5774179
+*/
+/**
+ * TODO: После фикса надо переписать на получение даныых из redux store
+*/
+const setup = (initialStore={}) => {
+    const store = storeFactory(initialStore);
+    const wrapper = mount(<GuessWords store ={store} />);
+
+    return wrapper;
 }
 
 describe('if there are no words guesses', () => {

@@ -1,7 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-class Form extends Component {
+import { guessWord } from '../GuessWords/store/actions';
+
+export class Form extends Component {
+    constructor(props) {
+        super(props);
+        this.input = React.createRef();
+    }
+    onClick = (e) => {
+        e.preventDefault();
+        this.props.guessWord(this.input.current.value);
+        this.input.current.value = '';
+    };
+
     render() {
         return(
             <div data-test="component-input">
@@ -15,10 +28,12 @@ class Form extends Component {
                             className="mb-2 ms-sm-3"
                             data-test="input-box"
                             placeholder="enter guess"
+                            ref={this.input}
                         />
                         <button
                             type="submit"
-                            data-test="input-button"
+                            data-test="input-submit"
+                            onClick={this.onClick}
                         >
                             Submit
                         </button>
@@ -29,8 +44,9 @@ class Form extends Component {
     }
 }
 
-const mapStateToProps = ({ success }) => {
-    return {success};
-};
+const mapStateToProps = ({ success }) => ({success});
+const mapDispatchToProps = (dispatch) => ({
+    guessWord: bindActionCreators(guessWord, dispatch),
+});
 
-export default connect(mapStateToProps)(Form);
+export default connect(mapStateToProps, mapDispatchToProps)(Form);
